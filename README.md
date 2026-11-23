@@ -101,3 +101,12 @@ Este é um protótipo académico de demonstração. Não há base de dados, aute
 - Universidade Aberta (2026). *Atividade prática — usar padrões de criação no projeto*.
 - https://render.com/docs/docker
 - https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/docker/building-net-docker-images?view=aspnetcore-10.0
+
+
+## Revisão após comentário do docente — Inven!RA
+
+- Ver `docs/Sequencia_Acesso_Aluno_InvenIRA.md` para o **diagrama de sequência corrigido** com LMS, Inven!RA e CyberSafe Lab, baseado na Figura 7 do artigo de Morgado et al. (2023).
+- Ver `docs/Matriz_Conformidade_InvenIRA.md` para a correspondência entre requisitos documentais, ficheiros da aplicação e lacunas da primeira semana.
+- **Importante:** o serviço `Provide activity` ainda não está implementado, em conformidade com o âmbito da primeira semana. O diagrama descreve a evolução prevista, não um percurso end-to-end já funcional.
+- O identificador original do LMS **não** deve ser transferido para o Activity Provider. A Inven!RA substitui-o por um identificador interno antes de enviar os parâmetros ao AP.
+- A implementação atual devolve dados fictícios de analytics e ainda não conserva eventos reais por instância/aluno; não afirmar integração end-to-end validada.
