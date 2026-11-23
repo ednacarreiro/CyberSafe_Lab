@@ -1,0 +1,31 @@
+using System.Text.Json;
+using CyberSafeLab.Application.Abstractions;
+using CyberSafeLab.Application.Features.Analytics;
+using CyberSafeLab.Application.Features.Configuration;
+using CyberSafeLab.Application.Features.Deploy;
+using CyberSafeLab.Application.Features.Registration;
+using CyberSafeLab.Infrastructure.Hosting;
+using CyberSafeLab.Infrastructure.Repositories;
+using CyberSafeLab.Api.Features;
+
+var builder = WebApplication.CreateBuilder(args);
+var portText = Environment.GetEnvironmentVariable("PORT");
+if (!int.TryParse(portText, out var port) || port is < 1 or > 65535) port = 3000;
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+builder.Services.AddSingleton<IUrlBuilder, PublicUrlBuilder>();
+builder.Services.AddSingleton<IActivityRepository, DemoActivityRepository>();
+builder.Services.AddTransient<GetRegistration>();
+builder.Services.AddTransient<GetParameters>();
+builder.Services.AddTransient<DeployActivity>();
+builder.Services.AddTransient<GetAvailableAnalytics>();
+builder.Services.AddTransient<GetActivityAnalytics>();
+var app = builder.Build();
+app.Use(async (ctx, next) => { ctx.Response.Headers["X-Content-Type-Options"] = "nosniff"; await next(ctx); });
+app.MapGet("/health", () => Results.Ok(new { status = "ok", atividade = "CyberSafe Lab", fase = "semana-1" }));
+app.MapGet("/", (GetRegistration handler) => Results.Ok(new { projeto = "CyberSafe Lab", registo = handler.Execute() }));
+app.MapGet("/registo-atividade", (GetRegistration handler) => Results.Json(handler.Execute()));
+ConfigurationEndpoints.Map(app);
+DeployEndpoints.Map(app);
+AnalyticsEndpoints.Map(app);
+// Sexto serviço (Provide activity) fica intencionalmente por implementar nesta semana.
+app.Run();

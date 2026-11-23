@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: cybersafe-lab-invenira
+    runtime: docker
+    healthCheckPath: /health
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+# Após criar o serviço, definir PUBLIC_BASE_URL com o URL HTTPS público real.
